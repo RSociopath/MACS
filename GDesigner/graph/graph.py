@@ -342,16 +342,15 @@ class Graph(ABC):
                   ) -> List[Any]:
         # inputs:{'task':"xxx"}
         log_probs = 0
-        output_dir = f"/home/teachhu/wyh/{dir}"
-        output_file = os.path.join(output_dir, f"output_{ix}.txt")
-        os.makedirs(output_dir, exist_ok=True)
+       # output_dir = f"/home/teachhu/wyh/{dir}"
+        #output_file = os.path.join(output_dir, f"output_{ix}.txt")
+        #os.makedirs(output_dir, exist_ok=True
         new_features = self.construct_new_features(input['task'])
         logits = self.gcn(new_features,self.role_adj_matrix)
         logits = self.mlp(logits)
         self.spatial_logits = logits @ logits.t()
         self.spatial_logits = min_max_norm(torch.flatten(self.spatial_logits))
-        with open(output_file, 'a') as f:
-                    f.write(f"当前spatial_logits：{self.spatial_logits}:")
+
         similarities = 0
         for round in range(num_rounds):
             log_probs += self.construct_spatial_connection()
@@ -364,14 +363,14 @@ class Graph(ABC):
             count=0
             while zero_in_degree_queues:
                 current_node_id = zero_in_degree_queues.pop(0)
-                with open(output_file, 'a') as f:
-                    f.write(f"当前为：{self.nodes[current_node_id].id}:")
+                # with open(output_file, 'a') as f:
+                #     f.write(f"当前为：{self.nodes[current_node_id].id}:")
                 for successor in self.nodes[current_node_id].spatial_successors:
                     if successor.id not in self.nodes.keys():
                         continue
                     in_degrees[successor.id] -= 1
-                    with open(output_file, 'a') as f:
-                        f.write(f"当前节点的后继为：{successor.id}\n")
+                    # with open(output_file, 'a') as f:
+                    #     f.write(f"当前节点的后继为：{successor.id}\n")
                     if in_degrees[successor.id] == 0:
                         zero_in_degree_queues.append(successor.id)
             while zero_in_degree_queue:
@@ -386,7 +385,7 @@ class Graph(ABC):
                 while tries < max_tries:
                     try:
                         await asyncio.wait_for(self.nodes[current_node_id].async_execute(input,ix,bs,dir=dir),timeout=max_time) # output is saved in the node.outputs
-                        similarities+=self.nodes[current_node_id].sim[ix]
+                        # similarities+=self.nodes[current_node_id].sim[ix]
                         break
                     except Exception as e:
                         print(f"Error During execution of node {current_node_id}: {e}")
@@ -403,9 +402,9 @@ class Graph(ABC):
         similarities=similarities/(count)
         self.connect_decision_node()
         await self.decision_node.async_execute(input,ix=ix,bs=bs,dir=dir)
-        with open(output_file, 'a') as f:
-            f.write(f"################average similarity:{similarities}\n")
-            f.write(f"################end of question\n")
+        # with open(output_file, 'a') as f:
+        #     f.write(f"################average similarity:{similarities}\n")
+        #     f.write(f"################end of question\n")
         final_answers = self.decision_node.outputs
 
         if len(final_answers) == 0:

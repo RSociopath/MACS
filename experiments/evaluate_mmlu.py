@@ -1,7 +1,6 @@
 import os,torch
 
-save_dir = "/home/teachhu/model_saved"
-os.makedirs(save_dir, exist_ok=True)
+
 acc=0.66
 import json
 import math

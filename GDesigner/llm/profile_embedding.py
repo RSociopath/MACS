@@ -5,19 +5,18 @@ import torch
 # 选择 GPU 0
 
 def get_sentence_embedding(sentence):
-    model = SentenceTransformer('/home/teachhu/wyh/GDesigner-main/GDesigner/llm/all-MiniLM-L12-v2',local_files_only=True)
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+    model = SentenceTransformer('/public/home/wxhu_br/GNN/GDesigner-main/GDesigner/llm/all')
+
 
 # 使用 GPU 0
-    model = model.to(device)
+
     embeddings = model.encode(sentence)
     return torch.tensor(embeddings)
 def get_sim_embedding(sentence):
-    model = SentenceTransformer('/home/teachhu/wyh/GDesigner-main/GDesigner/llm/e5-large-v2',local_files_only=True)
-    device = torch.device("cuda:1" if torch.cuda.is_available() else "cpu")
+    model = SentenceTransformer('/public/home/wxhu_br/GNN/GDesigner-main/GDesigner/llm/all')
+
 
 # 使用 GPU 0
-    model = model.to(device)
     embeddings = model.encode(sentence)
     return torch.tensor(embeddings)
 # import torch

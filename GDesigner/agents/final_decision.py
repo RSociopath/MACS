@@ -102,17 +102,17 @@ class FinalRefer(Node):
         system_prompt, user_prompt = self._process_inputs(input, spatial_info, temporal_info)
         message = [{'role':'system','content':system_prompt},{'role':'user','content':user_prompt}]
         response = await self.llm.agen(message)
-        output_dir = f"/home/teachhu/wyh/{dir}"
-        output_file = os.path.join(output_dir, f"output_{ix}.txt")
-        
-        # 确保目录存在
-        os.makedirs(output_dir, exist_ok=True)
-        
-        # 将内容写入文件
-        with open(output_file, 'a') as f:
-            f.write(f"################system prompt:{system_prompt}\n")
-            f.write(f"################user prompt:{user_prompt}\n")
-            f.write(f"################response:{response}\n")
+        # output_dir = f"/public/home/wxhu_br/GNN/{dir}"
+        # output_file = os.path.join(output_dir, f"output_{ix}.txt")
+        #
+        # # 确保目录存在
+        # os.makedirs(output_dir, exist_ok=True)
+        #
+        # # 将内容写入文件
+        # with open(output_file, 'a') as f:
+        #     f.write(f"################system prompt:{system_prompt}\n")
+        #     f.write(f"################user prompt:{user_prompt}\n")
+        #     f.write(f"################response:{response}\n")
         return response
 
 @AgentRegistry.register('FinalDirect')

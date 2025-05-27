@@ -9,7 +9,7 @@ from GDesigner.llm.format import Message
 from GDesigner.llm.price import cost_count
 from GDesigner.llm.llm import LLM
 from GDesigner.llm.llm_registry import LLMRegistry
-
+from GDesigner.utils.globals import Cost, PromptTokens, CompletionTokens
 
 OPENAI_API_KEYS = ['']
 BASE_URL = ''
@@ -39,7 +39,7 @@ async def achat(
     #     }
     # }
     data={
-        "model": "/home/teachhu/wyh/instruct",
+        "model": "Llama",
         "messages":msg,
         "temperature":0,
         "max_tokens":4096
@@ -50,10 +50,11 @@ async def achat(
             #print(response_data)
             prompt = "".join([item['content'] for item in msg])
             #cost_count(prompt,response_data['data'],model)
-            try:
-                cost_count(prompt,response_data['choices'][0]['message']['content'],model)
-            except:
-                print(response_data)
+        try:
+            cost_count(prompt, response_data['choices'][0]['message']['content'], model)
+            CompletionTokens.instance().value +=response_data['usage']['completion_tokens']
+        except:
+            print(response_data)
             return response_data['choices'][0]['message']['content']
             
     

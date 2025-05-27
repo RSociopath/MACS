@@ -1,11 +1,14 @@
 import sys, os
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# # sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+# PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# sys.path.insert(0, PROJECT_ROOT)
+sys.path.insert(0, "/GNN/GDesigner-main")
 sys.stdout.reconfigure(encoding='utf-8')
 
 import asyncio
 from typing import Union, Literal, List
 import argparse
-import random
+import random,time
 
 from GDesigner.graph.graph import Graph
 from datasets.mmlu_dataset import MMLUDataset
@@ -79,15 +82,16 @@ async def main():
                   **kwargs)
     download()
     dataset_train = MMLUDataset('dev')
-    dataset_val = MMLUDataset('val')
-    
+    #dataset_val = MMLUDataset('val')
+
     if args.optimized_spatial or args.optimized_temporal:
+        # st = time.time()
         await train(graph=graph,dataset=dataset_train,num_iters=args.num_iterations,num_rounds=args.num_rounds,
                     lr=args.lr,batch_size=args.batch_size,dir=args.dir)
-        
+        # print("time consumed: "+str(time.time()-st))
     
-    score = await evaluate(graph=graph,dataset=dataset_val,num_rounds=args.num_rounds,limit_questions=limit_questions,eval_batch_size=args.batch_size,dir=args.dir)
-    print(f"Score: {score}")
+    # score = await evaluate(graph=graph,dataset=dataset_val,num_rounds=args.num_rounds,limit_questions=limit_questions,eval_batch_size=args.batch_size,dir=args.dir)
+    # print(f"Score: {score}")
 
 
 
